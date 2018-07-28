@@ -10,43 +10,41 @@ class Board:
         return self._tile_array
 
     def check_valid_coord(self, row, col, color):
-        #store current player color to check against other pieces
-        color = color
 
-        #create list of all modifications to row, col tuple
+        #create list of all modifications to row, check_ tuple
         directions = [(-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (1, 1), (0, 1), (-1, 1)]
 
         for dir in directions:
-            row += dir[0]
-            col += dir[1]
+            check_row = row + dir[0]
+            check_col = col + dir[1]
 
             #skip over directions that lead out of bounds
-            if row < 0 or row >= 8 or col < 0 or col >= 8:
+            if check_row < 0 or check_row >= 8 or check_col < 0 or check_col >= 8:
                 continue
 
             else:
                 #if no piece there, invalid direction and move on
-                if self.tile_array[row][col].isempty():
+                if self.tile_array[check_row][check_col].isempty():
                     continue
 
-                #if piece color is different from current piece, check if there is piece of player color to create matching caps
-                elif self.tile_array[row][col].piece_color() != color:
+                #if piece check_or is different from current piece, check if there is piece of player check_or to create matching caps
+                elif self.tile_array[check_row][check_col].piece_color() != color:
                     #update search in the same direction as before until piece is found or out of bounds
                     #we update first to ensure loop conditions hold
-                    row += dir[0]
-                    col += dir[1]
-                    while (row >= 0 and row < 8 and col >= 0 and col < 8):
-                        if self.tile_array[row][col].piece_color() == color:
+                    check_row += dir[0]
+                    check_col += dir[1]
+                    while (check_row >= 0 and check_row < 8 and check_col >= 0 and check_col < 8):
+                        if self.tile_array[check_row][check_col].piece_color() == color:
                             return True
 
-                        row += dir[0]
-                        col += dir[1]
+                        check_row += dir[0]
+                        check_col += dir[1]
 
 
         #if fall all tests then invalid coord
         return False
 
-    def place_piece(self, row, col, color):
+    def place_piece(self, check_row, check_, check_or):
         pass
 
     def get_score(self):
@@ -61,6 +59,8 @@ def test():
     test_board.tile_array[2][2].place_piece('black')
     assert test_board.check_valid_coord(3, 2, "white") == True
     assert test_board.check_valid_coord(3, 2, "black") == False
+    test_board.tile_array[1][3].place_piece('black')
+    assert test_board.check_valid_coord(1, 1, "black") == True
 
 if __name__ == '__main__':
     test()
