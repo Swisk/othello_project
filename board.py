@@ -19,7 +19,11 @@ class Board:
         #check if piece is appropriate before placing
         if self.check_valid_coord(row, col, color):
             self.tile_array[row][col].place_piece(color)
-            #need to flip all intermediate pieces
+            
+            #flip all intermediate pieces
+            for intermediate_tile in self.get_intermediate(row, col, color):
+                intermediate_tile.flip_piece()
+
     
     def get_intermediate(self, row, col, color):
         #create list of all modifications to row, check_ tuple
@@ -76,8 +80,15 @@ class Board:
 
 def test():
     test_board = Board()
+    """
+    pieces manually placed
+    - x o
+    - o - 
+    - - -
+    """
+
+    #test check_valid_coord and correspondingly get_intermediate method
     assert test_board.check_valid_coord(1, 1, "white") == False
-    # not supposed to be accessed like this 
     test_board.tile_array[1][2].place_piece('white')
     test_board.tile_array[2][2].place_piece('black')
     assert test_board.check_valid_coord(3, 2, "white") == True
@@ -87,6 +98,14 @@ def test():
     test_board.tile_array[2][2].flip_piece()
     assert test_board.check_valid_coord(3, 2, "black") == False
     assert test_board.check_valid_coord(3, 2, "white") == False
+    test_board.tile_array[2][2].flip_piece()
+
+    #test place_piece method
+    test_board.place_piece(1, 1, 'black')
+    assert test_board.tile_array[1][1].piece_color() == 'black'
+    assert test_board.tile_array[1][2].piece_color() == 'black'
+    assert test_board.tile_array[1][3].piece_color() == 'black'
+    assert test_board.tile_array[2][2].piece_color() == 'black'
 
 if __name__ == '__main__':
     test()
