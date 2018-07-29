@@ -44,7 +44,13 @@ class Board:
         #if fall all tests then invalid coord
         return False
 
-    def place_piece(self, check_row, check_, check_or):
+    def place_piece(self, row, col, color):
+        #check if piece is appropriate before placing
+        if self.check_valid_coord(row, col, color):
+            self.tile_array[row][col].place_piece(color)
+            #need to flip all intermediate pieces
+    
+    def flip_intermediate(self):
         pass
 
     def get_score(self):
@@ -61,6 +67,9 @@ def test():
     assert test_board.check_valid_coord(3, 2, "black") == False
     test_board.tile_array[1][3].place_piece('black')
     assert test_board.check_valid_coord(1, 1, "black") == True
+    test_board.tile_array[2][2].flip_piece()
+    assert test_board.check_valid_coord(3, 2, "black") == False
+    assert test_board.check_valid_coord(3, 2, "white") == False
 
 if __name__ == '__main__':
     test()
