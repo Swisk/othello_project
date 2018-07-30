@@ -73,9 +73,26 @@ class Board:
                         check_col += dir[1]
             
         return output
+    
+    #method to iterate over all tiles in the tile array
+    def __iter__(self):
+        for row in self.tile_array:
+            for tile in row:
+                yield tile
 
+    #returns a tuple of white score and black score
     def get_score(self):
-        pass
+        white_score = 0
+        black_score = 0
+        for tile in self:
+            if not tile.isempty():
+                if tile.piece_color() == 'white':
+                    white_score += 1
+                elif tile.piece_color() == 'black':
+                    black_score += 1
+                else:
+                    print('error')
+        return (white_score, black_score)
 
 
 def test():
@@ -106,6 +123,9 @@ def test():
     assert test_board.tile_array[1][2].piece_color() == 'black'
     assert test_board.tile_array[1][3].piece_color() == 'black'
     assert test_board.tile_array[2][2].piece_color() == 'black'
+
+    #test get_score method and correspondingly __iter__
+    assert test_board.get_score() == (0, 4)
 
 if __name__ == '__main__':
     test()
