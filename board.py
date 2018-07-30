@@ -63,7 +63,7 @@ class Board:
                             #add valid intermediate tiles to output array
                             output.extend(dir_arr)
                             #exit the loop for current direction
-                            check_row = 0
+                            break
 
                         #add current tile to array
                         dir_arr.append(self.tile_array[check_row][check_col])
