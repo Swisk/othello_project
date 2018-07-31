@@ -94,6 +94,10 @@ class Board:
                     print('error')
         return (white_score, black_score)
 
+    #TODO implement board cloning for AI
+    def get_copy(self):
+        pass
+
 
 def test():
     test_board = Board()
