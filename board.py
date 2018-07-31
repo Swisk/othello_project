@@ -28,6 +28,8 @@ class Board:
             #flip all intermediate pieces
             for intermediate_tile in self.get_intermediate(row, col, color):
                 intermediate_tile.flip_piece()
+            return True
+        return False
 
     
     def get_intermediate(self, row, col, color):

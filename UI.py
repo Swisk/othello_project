@@ -6,8 +6,6 @@ class UI:
     def __init__(self):
         self._board = Board()
         self._turn = 'black'
-        
-        
 
     @property
     def board(self):
@@ -62,18 +60,22 @@ class UI:
         else:
             try:
                 row = ord(command[0].upper()) - 65
-                col = int(command[1]) - 1
-
+                col = int(command[1:]) - 1
+                #bound checking for input
                 #need error handling if piece is placed wrongly
-                self.board.place_piece(row, col, self.turn)
-                if self.turn == 'white':
-                    self.turn = 'black'
-                elif self.turn == 'black':
-                    self.turn = 'white'
-                self.print_board()
+                valid_turn = self.board.place_piece(row, col, self.turn)
+                if valid_turn:
+                    if self.turn == 'white':
+                        self.turn = 'black'
+                    elif self.turn == 'black':
+                        self.turn = 'white'
+                    return True
+                else:
+                    print('Illegal co-ordinates input for current player!')
+                    return self.control_state()
             except:
                 print('Error in co-ordinates input!')
-                self.control_state()
+                return self.control_state()
         return True
 
     def start(self):
