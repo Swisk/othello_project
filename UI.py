@@ -47,10 +47,6 @@ class UI:
             print('  +---+---+---+---+---+---+---+---+')
         print("Its {}'s turn to move!".format(self.turn.title()))
 
-    #place piece
-    def place_piece(self, row, col, color):
-        self.board.place_piece(row, col, color)
-
     #control user input
     def control_state(self):
         command = input('Enter co-ordinates to place piece:')
@@ -66,8 +62,8 @@ class UI:
                 assert row >= 0 and row < 8
                 assert col >= 0 and col < 8
                 
-                #need error handling if piece is placed wrongly
                 valid_turn = self.board.place_piece(row, col, self.turn)
+                #turn only changes if valid move was made
                 if valid_turn:
                     if self.turn == 'white':
                         self.turn = 'black'
