@@ -61,7 +61,11 @@ class UI:
             try:
                 row = ord(command[0].upper()) - 65
                 col = int(command[1:]) - 1
+                
                 #bound checking for input
+                assert row >= 0 and row < 8
+                assert col >= 0 and col < 8
+                
                 #need error handling if piece is placed wrongly
                 valid_turn = self.board.place_piece(row, col, self.turn)
                 if valid_turn:
