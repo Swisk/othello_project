@@ -76,11 +76,10 @@ class UI:
                     return True
                 else:
                     print('Illegal co-ordinates input for current player!')
-                    return self.control_state()
+                    return True
             except:
                 print('Error in co-ordinates input!')
-                return self.control_state()
-        return True
+                return True
 
     def start(self):
         cont = True
