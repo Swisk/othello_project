@@ -65,8 +65,10 @@ class Board:
                     check_col += dir[1]
 
                     while (check_row >= 0 and check_row < 8 and check_col >= 0 and check_col < 8):
+                        if self.tile_array[check_row][check_col].isempty():
+                            break
                         #add direction array to output only if direction is properly bounded
-                        if self.tile_array[check_row][check_col].piece_color() == color:
+                        elif self.tile_array[check_row][check_col].piece_color() == color:
                             #add valid intermediate tiles to output array
                             output.extend(dir_arr)
                             #exit the loop for current direction
@@ -110,44 +112,62 @@ def test():
     test_board = Board()
     """
     pieces manually placed
-    - x o
-    - o - 
-    - - -
+    - - - -
+    - o x -
+    - x o -
+    - - - -
     """
 
+    #test get_score method and correspondingly __iter__
+    assert test_board.get_score() == (2, 2)
+
     #test check_valid_coord and correspondingly get_intermediate method
+    assert test_board.check_valid_coord(0, 0, "white") == False
     assert test_board.check_valid_coord(1, 1, "white") == False
-    test_board.tile_array[1][2].place_piece('white')
-    test_board.tile_array[2][2].place_piece('black')
-    assert test_board.check_valid_coord(3, 2, "white") == True
-    assert test_board.check_valid_coord(3, 2, "black") == False
-    test_board.tile_array[1][3].place_piece('black')
-    assert test_board.check_valid_coord(1, 1, "black") == True
-    test_board.tile_array[2][2].flip_piece()
-    assert test_board.check_valid_coord(3, 2, "black") == False
-    assert test_board.check_valid_coord(3, 2, "white") == False
-    test_board.tile_array[2][2].flip_piece()
+
+    assert test_board.check_valid_coord(2, 2, "white") == False
+    assert test_board.check_valid_coord(2, 2, "black") == False
+
+    assert test_board.check_valid_coord(2, 3, "white") == False
+    assert test_board.check_valid_coord(2, 3, "black") == True
+    
+    test_board.tile_array[6][6].place_piece('black')
+    assert test_board.check_valid_coord(2, 2, "white") == False
+    assert test_board.check_valid_coord(2, 2, "black") == False
+    test_board.tile_array[6][6] = Tile()
 
     #test place_piece method
-    test_board.place_piece(1, 1, 'black')
-    assert test_board.tile_array[1][1].piece_color() == 'black'
-    assert test_board.tile_array[1][2].piece_color() == 'black'
-    assert test_board.tile_array[1][3].piece_color() == 'black'
-    assert test_board.tile_array[2][2].piece_color() == 'black'
-    
-    #test get_score method and correspondingly __iter__
-    assert test_board.get_score() == (0, 4)
-    
-    test_board.tile_array[1][1].flip_piece()
-    test_board.place_piece(1, 4, 'white')
-    assert test_board.tile_array[1][1].piece_color() == 'white'
-    assert test_board.tile_array[1][2].piece_color() == 'white'
-    assert test_board.tile_array[1][3].piece_color() == 'white'
-    assert test_board.tile_array[2][2].piece_color() == 'black'
-    assert test_board.tile_array[1][4].piece_color() == 'white'
+    assert test_board.place_piece(2, 3, 'black') == True
+    assert test_board.tile_array[2][3].piece_color() == 'black'
+    assert test_board.tile_array[3][3].piece_color() == 'black'
+    assert test_board.tile_array[4][3].piece_color() == 'black'
+    assert test_board.tile_array[3][4].piece_color() == 'black'
+    assert test_board.tile_array[4][4].piece_color() == 'white'
 
+    assert test_board.place_piece(7, 7, 'black') == False
+    assert test_board.tile_array[2][3].piece_color() == 'black'
+    assert test_board.tile_array[3][3].piece_color() == 'black'
+    assert test_board.tile_array[4][3].piece_color() == 'black'
+    assert test_board.tile_array[3][4].piece_color() == 'black'
+    assert test_board.tile_array[4][4].piece_color() == 'white'
+    
     #test get_score method and correspondingly __iter__
-    assert test_board.get_score() == (4, 1)
+    assert test_board.get_score() == (1, 4)
+    
+
+    test_board = Board()
+    test_board.tile_array[1][4].place_piece('white')
+    test_board.tile_array[2][4].place_piece('white')
+    test_board.tile_array[3][4].place_piece('white')
+    test_board.tile_array[4][4].place_piece('white')
+    test_board.tile_array[5][4].place_piece('black')
+    test_board.tile_array[2][3].place_piece('black')
+    test_board.tile_array[3][3].place_piece('black')
+    test_board.tile_array[4][3].place_piece('black')
+    test_board.tile_array[5][3].place_piece('black')
+    test_board.tile_array[2][4].place_piece('black')
+    test_board.tile_array[5][4].place_piece('black')
+    assert test_board.check_valid_coord(6, 4, "white") == True
 
 if __name__ == '__main__':
     test()
