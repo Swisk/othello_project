@@ -3,6 +3,11 @@ from tile import Tile
 class Board:
     def __init__(self):
         self._tile_array = [[Tile() for col in range(8)] for row in range(8)]
+        #manually place starting pieces
+        self._tile_array[3][3].place_piece('white')
+        self._tile_array[4][4].place_piece('white')
+        self._tile_array[3][4].place_piece('black')
+        self._tile_array[4][3].place_piece('black')
 
     #getter
     @property
@@ -127,9 +132,20 @@ def test():
     assert test_board.tile_array[1][2].piece_color() == 'black'
     assert test_board.tile_array[1][3].piece_color() == 'black'
     assert test_board.tile_array[2][2].piece_color() == 'black'
-
+    
     #test get_score method and correspondingly __iter__
     assert test_board.get_score() == (0, 4)
+    
+    test_board.tile_array[1][1].flip_piece()
+    test_board.place_piece(1, 4, 'white')
+    assert test_board.tile_array[1][1].piece_color() == 'white'
+    assert test_board.tile_array[1][2].piece_color() == 'white'
+    assert test_board.tile_array[1][3].piece_color() == 'white'
+    assert test_board.tile_array[2][2].piece_color() == 'black'
+    assert test_board.tile_array[1][4].piece_color() == 'white'
+
+    #test get_score method and correspondingly __iter__
+    assert test_board.get_score() == (4, 1)
 
 if __name__ == '__main__':
     test()
