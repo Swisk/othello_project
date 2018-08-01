@@ -40,48 +40,50 @@ class Board:
         #create output list of all intermediate tiles
         output = []
 
-        for dir in directions:
-            check_row = row + dir[0]
-            check_col = col + dir[1]
-            dir_arr = []
+        #check only if tile is empty
+        if not self.tile_array[row][col].isempty():
+            for dir in directions:
+                check_row = row + dir[0]
+                check_col = col + dir[1]
+                dir_arr = []
 
-            #skip over directions that lead out of bounds
-            if check_row < 0 or check_row >= 8 or check_col < 0 or check_col >= 8:
-                continue
-
-            else:
-                #if no piece there, invalid direction and move on
-                if self.tile_array[check_row][check_col].isempty():
+                #skip over directions that lead out of bounds
+                if check_row < 0 or check_row >= 8 or check_col < 0 or check_col >= 8:
                     continue
 
-                #if piece check_or is different from current piece, check if there is piece of player color 
-                #to create matching caps
-                elif self.tile_array[check_row][check_col].piece_color() != color:
-                    #update search in the same direction as before until piece is found or out of bounds
-                    #we update first to ensure loop conditions hold
-                    #add current tile to array
-                    dir_arr.append(self.tile_array[check_row][check_col])
+                else:
+                    #if no piece there, invalid direction and move on
+                    if self.tile_array[check_row][check_col].isempty():
+                        continue
 
-                    #move to next tile in direction
-                    check_row += dir[0]
-                    check_col += dir[1]
-
-                    while (check_row >= 0 and check_row < 8 and check_col >= 0 and check_col < 8):
-                        if self.tile_array[check_row][check_col].isempty():
-                            break
-                        #add direction array to output only if direction is properly bounded
-                        elif self.tile_array[check_row][check_col].piece_color() == color:
-                            #add valid intermediate tiles to output array
-                            output.extend(dir_arr)
-                            #exit the loop for current direction
-                            break
-
+                    #if piece check_or is different from current piece, check if there is piece of player color 
+                    #to create matching caps
+                    elif self.tile_array[check_row][check_col].piece_color() != color:
+                        #update search in the same direction as before until piece is found or out of bounds
+                        #we update first to ensure loop conditions hold
                         #add current tile to array
                         dir_arr.append(self.tile_array[check_row][check_col])
 
                         #move to next tile in direction
                         check_row += dir[0]
                         check_col += dir[1]
+
+                        while (check_row >= 0 and check_row < 8 and check_col >= 0 and check_col < 8):
+                            if self.tile_array[check_row][check_col].isempty():
+                                break
+                            #add direction array to output only if direction is properly bounded
+                            elif self.tile_array[check_row][check_col].piece_color() == color:
+                                #add valid intermediate tiles to output array
+                                output.extend(dir_arr)
+                                #exit the loop for current direction
+                                break
+
+                            #add current tile to array
+                            dir_arr.append(self.tile_array[check_row][check_col])
+
+                            #move to next tile in direction
+                            check_row += dir[0]
+                            check_col += dir[1]
             
         return output
     

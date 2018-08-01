@@ -28,11 +28,12 @@ class Greedy():
         moves = self.weigh_moves()
         
         #return a random move from chosen set
-        return random.choice(moves)
+        if moves:
+            return random.choice(moves)
         
     
     def weigh_moves(self):
-        max_score = 0
+        max_score = -99
         moves = []
         
         #select moves that rank the best in the scoring function
