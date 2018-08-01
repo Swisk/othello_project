@@ -106,7 +106,7 @@ class Board:
         return (white_score, black_score)
     
 
-    #TODO implement board cloning for AI
+    #get board clone for AI
     def get_copy(self):
         new_board = Board()
         for row in range(8):
@@ -118,8 +118,15 @@ class Board:
                     new_board.tile_array[row][col].place_piece(color)
         return new_board
             
-
-
+    #returns a list containing all posible move tuples
+    def get_valid_moves(self, color):
+        moves = []
+        for row in range(8):
+            for col in range(8):
+                if self.check_valid_coord(row, col, color):
+                    moves.append((row, col))
+        return moves
+   
 def test():
     board = Board()
     """
@@ -153,6 +160,10 @@ def test():
     assert test_board.check_valid_coord(2, 2, "white") == False
     assert test_board.check_valid_coord(2, 2, "black") == False
     test_board.tile_array[6][6] = Tile()
+    
+    #test get_valid_moves method
+    assert test_board.get_valid_moves('white') == [(2, 4), (3, 5), (4, 2), (5, 3)]
+    assert test_board.get_valid_moves('black') == [(2, 3), (3, 2), (4, 5), (5, 4)]
 
     #test place_piece method
     assert test_board.place_piece(2, 3, 'black') == True
@@ -171,6 +182,8 @@ def test():
     
     #test get_score method and correspondingly __iter__
     assert test_board.get_score() == (1, 4)
+    assert test_board.get_valid_moves('white') == [(2, 2), (2, 4), (4, 2)]
+    assert test_board.get_valid_moves('black') == [(4, 5), (5, 4), (5, 5)]
     
 
     test_board = Board()
@@ -186,6 +199,8 @@ def test():
     test_board.tile_array[2][4].place_piece('black')
     test_board.tile_array[5][4].place_piece('black')
     assert test_board.check_valid_coord(6, 4, "white") == True
+    assert test_board.get_valid_moves('white') == [(1, 2), (2, 2), (3, 2), (4, 2), (5, 2), (6, 2), (6, 4)]
+    assert test_board.get_valid_moves('black') == [(0, 4), (0, 5), (1, 4), (1, 5), (2, 4), (2, 5), (3, 4), (3, 5), (4, 5), (5, 5)]
 
 if __name__ == '__main__':
     test()
