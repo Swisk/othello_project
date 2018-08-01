@@ -51,8 +51,15 @@ class UI:
     def control_state(self):
         command = input('Enter co-ordinates to place piece:')
         #quit command as long as command begins with q
-        if command[0] == 'q':
+        if len(command) < 1:
+            print('Illegal command registered!')
+            return True
+        elif command[0] == 'q':
             return False
+        
+        #used for forcing weird game states in debugging
+        elif command == 'pass':
+            self.change_turn()
         else:
             try:
                 row = ord(command[0].upper()) - 65
@@ -62,6 +69,7 @@ class UI:
                 assert row >= 0 and row < 8
                 assert col >= 0 and col < 8
                 
+<<<<<<< HEAD
                 valid_turn = self.board.place_piece(row, col, self.turn)
                 #turn only changes if valid move was made
                 if valid_turn:
@@ -73,16 +81,49 @@ class UI:
                 else:
                     print('Illegal co-ordinates input for current player!')
                     return True
+=======
+                #returns false if no more valid moves left in game
+                return self.place_piece(row, col)
+                
+>>>>>>> 0fb17cb87bb84016fa07a40ddf2191289560af30
             except:
                 print('Error in co-ordinates input!')
-                return True
-
+        return True
+            
+    
+    def place_piece(self, row, col):
+        #need error handling if piece is placed wrongly
+        valid_turn = self.board.place_piece(row, col, self.turn)
+        if valid_turn:
+            self.change_turn()
+            
+            #if the current player has no legal moves, switch turns again
+            if not self.board.get_valid_moves(self.turn):
+                self.change_turn()
+                
+                #if no valid moves again, end the game
+                if not self.board.get_valid_moves(self.turn):
+                    return False
+        else:
+            print('Illegal co-ordinates input for current player!')
+            
+        return True
+        
+    def change_turn(self):
+        if self.turn == 'white':
+            self.turn = 'black'
+        elif self.turn == 'black':
+            self.turn = 'white'
+    
     def start(self):
+        self.board.setup_board()
         cont = True
         while cont:
             self.print_board()
             self.print_score()
             cont = self.control_state()
+        self.print_board()
+        self.print_score()
         
 
 def test():
