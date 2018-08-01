@@ -85,7 +85,7 @@ class UI:
         if valid_turn:
             self.change_turn()
             
-            #if the current player has no legal moves, switch turns again
+            #if the current player has no legal moves, switch turns
             if not self.board.get_valid_moves(self.turn):
                 self.change_turn()
                 
@@ -102,13 +102,23 @@ class UI:
         if move:
             print('AI is thinking...')
             time.sleep(random.uniform(1, 3))
-            self.place_piece(move[0], move[1])
+            return self.place_piece(move[0], move[1])
         
     def change_turn(self):
         if self.turn == 'white':
             self.turn = 'black'
         elif self.turn == 'black':
             self.turn = 'white'
+
+    def cleaning_up(self):
+        print("Game Over!")
+        score = self.board.get_score()
+        if score[0] > score[1]:
+            print('White wins!')
+        elif score[0] < score[1]:
+            print('Black wins!')
+        else:
+            print('Drawn Game!')
     
     def start(self):
         self.board.setup_board()
@@ -117,13 +127,12 @@ class UI:
         cont = True
         while cont:
             if self.turn == 'black':
-                self.ai_handler()
+                cont = self.ai_handler()
             elif self.turn == 'white':
                 cont = self.control_state()
             self.print_board()
             self.print_score()
-        self.print_board()
-        self.print_score()
+        self.cleaning_up()
         
 
 def test():
