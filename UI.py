@@ -55,7 +55,10 @@ class UI:
     def control_state(self):
         command = input('Enter co-ordinates to place piece:')
         #quit command as long as command begins with q
-        if command[0] == 'q':
+        if len(command) < 1:
+            print('Illegal command registered!')
+            return True
+        elif command[0] == 'q':
             return False
         else:
             try:
