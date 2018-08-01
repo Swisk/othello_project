@@ -2,11 +2,12 @@ from tile import Tile
 from board import Board
 import random
 from agent import *
+import time
 
 class UI:
     def __init__(self):
         self._board = Board()
-        self._turn = 'black'
+        self._turn = random.choice(['black', 'white'])
 
     @property
     def board(self):
@@ -99,6 +100,8 @@ class UI:
     def ai_handler(self):
         move = Greedy(self.board).play()
         if move:
+            print('AI is thinking...')
+            time.sleep(random.uniform(1, 3))
             self.place_piece(move[0], move[1])
         
     def change_turn(self):
@@ -109,12 +112,16 @@ class UI:
     
     def start(self):
         self.board.setup_board()
+        self.print_board()
+        self.print_score()
         cont = True
         while cont:
-            self.ai_handler()
+            if self.turn == 'black':
+                self.ai_handler()
+            elif self.turn == 'white':
+                cont = self.control_state()
             self.print_board()
             self.print_score()
-            cont = self.control_state()
         self.print_board()
         self.print_score()
         
