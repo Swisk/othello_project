@@ -31,7 +31,7 @@ class UI:
     def print_board(self):
         print('    1   2   3   4   5   6   7   8')
         print('  +---+---+---+---+---+---+---+---+')
-        letters = ['A', 'B', 'C', 'D', 'E', 'F', 'H', 'G']
+        letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
         for row in range(8):
             #('  |   |   |   |   |   |   |   |   |')
             #need to iterate over tile objects

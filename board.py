@@ -25,11 +25,11 @@ class Board:
     def place_piece(self, row, col, color):
         #check if piece is appropriate before placing
         if self.check_valid_coord(row, col, color):
-            self.tile_array[row][col].place_piece(color)
-            
             #flip all intermediate pieces
             for intermediate_tile in self.get_intermediate(row, col, color):
                 intermediate_tile.flip_piece()
+            
+            self.tile_array[row][col].place_piece(color)
             return True
         return False
 
@@ -41,7 +41,7 @@ class Board:
         output = []
 
         #check only if tile is empty
-        if not self.tile_array[row][col].isempty():
+        if self.tile_array[row][col].isempty():
             for dir in directions:
                 check_row = row + dir[0]
                 check_col = col + dir[1]
