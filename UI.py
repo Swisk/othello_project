@@ -1,6 +1,7 @@
 from tile import Tile
 from board import Board
 import random
+from agent import *
 
 class UI:
     def __init__(self):
@@ -69,23 +70,9 @@ class UI:
                 assert row >= 0 and row < 8
                 assert col >= 0 and col < 8
                 
-<<<<<<< HEAD
-                valid_turn = self.board.place_piece(row, col, self.turn)
-                #turn only changes if valid move was made
-                if valid_turn:
-                    if self.turn == 'white':
-                        self.turn = 'black'
-                    elif self.turn == 'black':
-                        self.turn = 'white'
-                    return True
-                else:
-                    print('Illegal co-ordinates input for current player!')
-                    return True
-=======
                 #returns false if no more valid moves left in game
                 return self.place_piece(row, col)
                 
->>>>>>> 0fb17cb87bb84016fa07a40ddf2191289560af30
             except:
                 print('Error in co-ordinates input!')
         return True
@@ -108,6 +95,11 @@ class UI:
             print('Illegal co-ordinates input for current player!')
             
         return True
+
+    def ai_handler(self):
+        move = Greedy(self.board).play()
+        if move:
+            self.place_piece(move[0], move[1])
         
     def change_turn(self):
         if self.turn == 'white':
@@ -119,6 +111,7 @@ class UI:
         self.board.setup_board()
         cont = True
         while cont:
+            self.ai_handler()
             self.print_board()
             self.print_score()
             cont = self.control_state()

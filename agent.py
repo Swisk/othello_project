@@ -36,7 +36,7 @@ class Greedy():
         moves = []
         
         #select moves that rank the best in the scoring function
-        for move in self.board_state.get_valid_moves():
+        for move in self.board_state.get_valid_moves(self.turn):
             #advance the board by action
             stepped_board = self.step_state(move)
             
