@@ -82,6 +82,7 @@ class UI:
                 return True
 
     def start(self):
+        self.board.setup_board()
         cont = True
         while cont:
             self.print_board()

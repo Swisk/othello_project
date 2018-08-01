@@ -3,16 +3,18 @@ from tile import Tile
 class Board:
     def __init__(self):
         self._tile_array = [[Tile() for col in range(8)] for row in range(8)]
-        #manually place starting pieces
-        self._tile_array[3][3].place_piece('white')
-        self._tile_array[4][4].place_piece('white')
-        self._tile_array[3][4].place_piece('black')
-        self._tile_array[4][3].place_piece('black')
 
     #getter
     @property
     def tile_array(self):
         return self._tile_array
+    
+    def setup_board(self):
+        #manually place starting pieces
+        self._tile_array[3][3].place_piece('white')
+        self._tile_array[4][4].place_piece('white')
+        self._tile_array[3][4].place_piece('black')
+        self._tile_array[4][3].place_piece('black')
 
     def check_valid_coord(self, row, col, color):
         #return true if there are valid intermediate tiles
@@ -102,14 +104,24 @@ class Board:
                 else:
                     print('error')
         return (white_score, black_score)
+    
 
     #TODO implement board cloning for AI
     def get_copy(self):
-        pass
+        new_board = Board()
+        for row in range(8):
+            for col in range(8):
+                if self.tile_array[row][col].isempty():
+                    continue
+                else:
+                    color = self.tile_array[row][col].piece_color()
+                    new_board.tile_array[row][col].place_piece(color)
+        return new_board
+            
 
 
 def test():
-    test_board = Board()
+    board = Board()
     """
     pieces manually placed
     - - - -
@@ -117,6 +129,12 @@ def test():
     - x o -
     - - - -
     """
+    
+    #test get_copy method
+    board.setup_board()
+    test_board = board.get_copy()
+    
+    
 
     #test get_score method and correspondingly __iter__
     assert test_board.get_score() == (2, 2)
