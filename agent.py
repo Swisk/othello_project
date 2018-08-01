@@ -8,12 +8,29 @@ Created on Wed Aug  1 13:04:06 2018
 from board import Board
 import random
 
-#agent will always assume it is black. to process white, pass in an inverted board
-class Agent():
+
+class Random():
+    def __init__(self, board_state):
+        self.board_state = board_state
+        
+    def play(self):
+        #return a random move from all available moves
+        return random.choice(self.board_state.get_valid_moves())
+
+#greedy will always assume it is black. to process white, pass in an inverted board
+class Greedy():
     def __init__(self, board_state):
         self.turn = 'black'
         self.board_state = board_state
-
+        
+    def play(self):
+        #find highest scoring moves
+        moves = self.weigh_moves()
+        
+        #return a random move from chosen set
+        return random.choice(moves)
+        
+    
     def weigh_moves(self):
         max_score = 0
         moves = []
@@ -31,8 +48,8 @@ class Agent():
             elif score == max_score:
                 moves.append(move)
             
-        #return a random move from chosen set
-        return random.choice(moves)
+        return moves
+        
 
         
     #assume that action is a tuple for row and coordinate to place piece
@@ -45,13 +62,45 @@ class Agent():
         
         return board_copy
     
-    #greedy
     #score the function as point difference
     def score_state(self, state):
         return state.get_score()[1] - state.get_score()[0]
     
-    #random
-    #all moves are ranked equally
-#    def score_state(self, state):
-#        return 1
+class Human():
+    def __init__(self, board_state):
+        self.board_state = board_state
+        
+    def play(self):
+        move = self.get_input()
+        return move
     
+    def get_input(self):
+        prompt = True
+        while prompt:
+            prompt = self.prompt_input()
+        return prompt
+        
+    def prompt_input(self):
+        command = input('Enter co-ordinates to place piece:')
+        #quit command as long as command begins with q
+        if len(command) < 1:
+            print('Illegal command registered!')
+            return True
+        elif command[0] == 'q':
+            return False
+        
+        else:
+            try:
+                row = ord(command[0].upper()) - 65
+                col = int(command[1:]) - 1
+                
+                #bound checking for input
+                assert row >= 0 and row < 8
+                assert col >= 0 and col < 8
+                
+                #returns false if no more valid moves left in game
+                return row, col
+                
+            except:
+                print('Error in co-ordinates input!')
+        return True
